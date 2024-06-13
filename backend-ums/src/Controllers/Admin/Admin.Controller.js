@@ -19,8 +19,13 @@ export const login = wrapAsync(async (req, res, next) => {
 
   const accessToken = await admin.generateAccessToken();
 
+  const cookieOption = {
+    httpOnly: true,
+    secure: true,
+  };
+
   res
     .status(200)
-    .cookie("accessToken", accessToken)
+    .cookie("accessToken", accessToken,cookieOption)
     .json(new ApiResponse(true, "Admin Login Successfull", {}));
 });

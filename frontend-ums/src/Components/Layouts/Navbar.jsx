@@ -39,8 +39,15 @@ const Navbar = ({ path = "default" }) => {
   );
 
   const loggedInUsers = (
-    <button className="text-white bg-gray-600 hover:bg-gray-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Logout</button>
+    <button
+      onClick={handleLogout}
+      className="text-white bg-gray-600 hover:bg-gray-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+    >
+      Logout
+    </button>
   );
+
+  const handleLogout = () => {};
 
   return (
     <header>

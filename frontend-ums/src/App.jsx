@@ -1,14 +1,17 @@
 import "./App.css";
 import Home from "./Components/Home";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Login from "./Components/Pages/Login";
-import Register from "./Components/Pages/Register";
 import PageNotFound from "./Components/Pages/PageNotFound";
-import UserProfile from "./Components/Pages/Users/UserProfile";
-import EditProfile from "./Components/Pages/EditProfile";
 import Dashboard from "./Components/Pages/Admin/Dashboard";
 import UserProtected from "./Components/Pages/Users/UserProtected";
 import AdminProtected from "./Components/Pages/Admin/AdminProtected";
+import UserProfile from "./Components/Pages/Users/Auth/UserProfile";
+import EditProfile from "./Components/Pages/Users/Auth/EditProfile";
+import LeaveRequest from "./Components/Pages/Users/Auth/LeaveRequest";
+import Login from "./Components/Pages/Users/Login";
+import Register from "./Components/Pages/Users/Register";
+import EmailVerification from "./Components/Pages/Users/EmailVerification";
+import View from "./Components/Pages/Users/Auth/View";
 
 function App() {
   const router = createBrowserRouter([
@@ -34,7 +37,11 @@ function App() {
     },
     {
       path: "/edit-profile",
-      element: <EditProfile />,
+      element: (
+        <UserProtected>
+          <EditProfile />
+        </UserProtected>
+      ),
     },
     {
       path: "/admin/user-list",
@@ -43,6 +50,26 @@ function App() {
           <Dashboard />
         </AdminProtected>
       ),
+    },
+    {
+      path: "/create-leave-request",
+      element: (
+        <UserProtected>
+          <LeaveRequest />
+        </UserProtected>
+      ),
+    },
+    {
+      path: "/view",
+      element: (
+        <UserProtected>
+          <View />
+        </UserProtected>
+      ),
+    },
+    {
+      path: "/verify-email/:token",
+      element: <EmailVerification />,
     },
     {
       path: "*",

@@ -1,11 +1,32 @@
-import React from "react";
-import UserProfile from "./UserProfile";
+import React, { useEffect, useState } from "react";
 import Unauthorized from "../Unauthorized";
+import { useCookies } from "react-cookie";
+import axios from "axios";
 
-const UserProtected = () => {
-  const isUser = true;
+const UserProtected = ({ children }) => {
+  const [isUser, setIsUser] = useState(false);
+  const [cookies] = useCookies(["accessToken"]);
 
-  return <div>{isUser ? <UserProfile /> : <Unauthorized />}</div>;
+  useEffect(() => {
+    const isAuthenticated = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/v1/users/me",
+          {
+            withCredentials: true,
+          }
+        );
+        console.log("response is :", response);
+        setIsUser(true);
+      } catch (error) {
+        setIsUser(false);
+      }
+    };
+
+    isAuthenticated();
+  }, [cookies.accessToken]);
+
+  return <div>{isUser ? children : <Unauthorized />}</div>;
 };
 
 export default UserProtected;

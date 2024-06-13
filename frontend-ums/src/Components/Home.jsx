@@ -1,8 +1,8 @@
-import About from "./AboutSection";
-import Achivements from "./AchivementsSection";
+import About from "./Layouts/AboutSection";
+import Achivements from "./Layouts/AchivementsSection";
 import Footer from "./Layouts/Footer";
+import MainSection from "./Layouts/MainSection";
 import Navbar from "./Layouts/Navbar";
-import MainSection from "./MainSection";
 
 const Home = () => {
   return (

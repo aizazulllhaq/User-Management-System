@@ -37,9 +37,25 @@ export const register = wrapAsync(async (req, res, next) => {
       new ApiError(400, `Fields required : ( ${missingFields.join(" - ")} )`)
     );
 
-  const isUserExist = await User.findOne({ email });
+  const isUserExist = await User.findOne({ $or: [{ username }, { email }] });
 
   if (isUserExist) return next(new ApiError(400, "User Already Exists"));
+
+  // Handle casting error for the 'age' field
+  if (isNaN(Number(age))) {
+    throw new ApiError(
+      400,
+      "Invalid age. Please enter a valid number for age."
+    );
+  }
+
+  // Handle casting error for the 'age' field
+  if (isNaN(Number(grade))) {
+    throw new ApiError(
+      400,
+      "Invalid grade. Please enter a valid number for grade."
+    );
+  }
 
   // upload profileImage to cloudinary
   const respProfileImage = await uploadOnCloudinary(req.file?.path);
@@ -69,7 +85,7 @@ export const register = wrapAsync(async (req, res, next) => {
       `<h1>Dear ${username}</h1>,<br>
     <br>
       <p>Thank you for registering on our site. Please click on the link below to verify your email address:</p>
-      <a href="${SERVER_URL}:${PORT}/api/v1/users/verify-email?token=${token}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;">Verify Email</a>
+      <a href="http://localhost:5173/verify-email?token=${token}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;">Verify Email</a>
       <p>If you did not request this, please ignore this email.</p>
       <br>
       <p>Thank you,<br>Your xyz Company</p>
@@ -77,11 +93,15 @@ export const register = wrapAsync(async (req, res, next) => {
     );
 
     res.status(201).json(
-      new ApiResponse(true, "User Created , Please verify your mail", {
-        username,
-        email,
-        profileImage,
-      })
+      new ApiResponse(
+        true,
+        `User Created Successfully Please verify your mail`,
+        {
+          username,
+          email,
+          profileImage,
+        }
+      )
     );
   } catch (error) {
     return next(
@@ -101,6 +121,7 @@ export const verifyEmail = wrapAsync(async (req, res, next) => {
   if (!user) return next(new ApiError(400, "Invalid Token"));
 
   user.isVerified = true;
+  user.emailVerificationToken = "";
 
   await user.save();
 
@@ -131,8 +152,13 @@ export const login = wrapAsync(async (req, res, next) => {
 
   const accessToken = await user.generateAccessToken();
 
+  const cookieOption = {
+    httpOnly: true,
+    secure: true,
+  };
+
   res
     .status(200)
-    .cookie("accessToken", accessToken)
+    .cookie("accessToken", accessToken, cookieOption)
     .json(new ApiResponse(true, "Login Successfull", { accessToken }));
 });

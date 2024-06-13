@@ -176,5 +176,26 @@ export const viewUserData = wrapAsync(async (req, res, next) => {
   const user = await User.findById(id);
   if (!user) return next(new ApiError(404, "User Not Found"));
 
-  const query = await User.aggregate([]);
+  const query = await User.aggregate([
+    
+    {
+      $lookup: {
+        from: "attendences",
+        localField: "_id",
+        foreignField: "user",
+        as: "user_de",
+        pipeline: [
+          {
+            $project: {
+              status: 1,
+              date: 1,
+              _id:0
+            },
+          },
+        ],
+      },
+    },
+  ]);
+
+  res.status(200).json(new ApiResponse(true, "User Detail", query));
 });

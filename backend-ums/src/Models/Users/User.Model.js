@@ -7,36 +7,37 @@ import { generateRandomToken } from "../../Utils/generateRandomToken.js";
 const userSchema = new Schema({
   username: {
     type: String,
-    required: true,
+    required: [true, "User Must be unique"],
     unique: true,
   },
   email: {
     type: String,
-    required: true,
+    required: [true, "Email is required"],
   },
   age: {
     type: Number,
-    required: true,
+    required: [true, "Age is required"],
   },
   gender: {
     type: String,
     enum: ["Male", "Female"],
+    required: [true, "Gender is required"],
   },
   grade: {
     type: Number,
-    required: true,
+    required: [true, "Grade is required"],
   },
   country: {
     type: String,
-    required: true,
+    required: [true, "Country is required"],
   },
   password: {
     type: String,
-    required: true,
+    required: [true,"Password is required"],
   },
   profileAvatar: {
     type: String,
-    required: true,
+    required: [true,"Profile Image is required"],
   },
   role: {
     type: String,
