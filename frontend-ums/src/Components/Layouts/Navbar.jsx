@@ -1,7 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const Navbar = ({ path = "default" }) => {
+  const [, , removeCookie] = useCookies(["accessToken"]);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    removeCookie("accessToken");
+    navigate("/login"); // or any other route you want to redirect to
+  };
+
+  const handleAdminLogout = () => {
+    removeCookie("accessToken");
+    navigate("/admin/login");
+  };
+
   const Login = (
     <Link
       to={"/login"}
@@ -47,7 +61,14 @@ const Navbar = ({ path = "default" }) => {
     </button>
   );
 
-  const handleLogout = () => {};
+  const adminLogout = (
+    <button
+      onClick={handleAdminLogout}
+      className="text-white bg-gray-600 hover:bg-gray-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+    >
+      Logout
+    </button>
+  );
 
   return (
     <header>
@@ -87,6 +108,8 @@ const Navbar = ({ path = "default" }) => {
             )}
 
             {path === "loggedIn" && loggedInUsers}
+
+            {path === "admin" && adminLogout}
 
             <button
               data-collapse-toggle="mobile-menu-2"

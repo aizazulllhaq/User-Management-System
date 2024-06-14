@@ -1,14 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../Layouts/Navbar";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const UserProfile = () => {
-  const handleAttendence = async () => {};
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [username, setUsername] = useState("");
+  const [noOfAttendances, setNoOfAttendances] = useState("");
+  const [noOfLeaveRequests, setNoOfLeaveRequests] = useState("");
+
+  const handleAttendence = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/profile/attendance",
+        {
+          withCredentials: true,
+        }
+      );
+      setSuccessMessage(response.data.message);
+      setErrorMessage("");
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+      setSuccessMessage("");
+    }
+  };
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/v1/users/me",
+          {
+            withCredentials: true,
+          }
+        );
+
+        setUsername(response.data.data[0].username);
+        setNoOfAttendances(response.data.data[0].noOfAttendances);
+        setNoOfLeaveRequests(response.data.data[0].noOfLeaveRequests);
+      } catch (error) {
+        console.error("Internal Server Error");
+      }
+    };
+
+    getUserData();
+  }, []);
 
   return (
     <>
       <Navbar path="loggedIn" />
+
       <div className="flex flex-col items-center justify-center my-3 bg-white">
+        {successMessage && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+            <span className="block sm:inline">{successMessage}</span>
+          </div>
+        )}
+        {errorMessage && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <span className="block sm:inline">{errorMessage}</span>
+          </div>
+        )}
         {/* dark theme */}
         <div className="container  m-4">
           <div className="max-w-3xl w-full mx-auto grid gap-4 grid-cols-1">
@@ -33,7 +85,7 @@ const UserProfile = () => {
                         <div className="flex items-center">
                           <div className="flex flex-col">
                             <div className="w-full flex-none text-xl text-black font-bold leading-none">
-                              Aizaz Ul Haq
+                              {username ? username : "Guest"}
                             </div>
                             <div className="flex-auto text-gray-400 my-2">
                               <span className="mr-3 text-black">
@@ -93,7 +145,7 @@ const UserProfile = () => {
                     <i className="fab fa-behance text-xl text-gray-400" />
                   </div>
                   <div className="text-2xl text-black font-serif  leading-8 mt-5">
-                    No of Attendence :
+                    No of Attendance : {noOfAttendances}
                   </div>
                 </div>
               </div>
@@ -109,7 +161,7 @@ const UserProfile = () => {
                     <i className="fab fa-codepen text-xl text-gray-400" />
                   </div>
                   <div className="text-2xl text-black font-serif leading-8 mt-5">
-                    No of Leaves :
+                    No of Leave Requests : {noOfLeaveRequests}
                   </div>
                 </div>
               </div>

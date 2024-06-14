@@ -10,13 +10,9 @@ const UserProtected = ({ children }) => {
   useEffect(() => {
     const isAuthenticated = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/v1/users/me",
-          {
-            withCredentials: true,
-          }
-        );
-        console.log("response is :", response);
+        await axios.get("http://localhost:8080/api/v1/users/me", {
+          withCredentials: true,
+        });
         setIsUser(true);
       } catch (error) {
         setIsUser(false);

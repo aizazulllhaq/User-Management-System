@@ -17,6 +17,9 @@ export const login = wrapAsync(async (req, res, next) => {
 
   if (!isPasswordCorrect) return next(new ApiError(400, "Invalid Credentials"));
 
+  if (admin.role !== "ADMIN")
+    return next(new ApiError(401, "Oops !! something went wrong"));
+
   const accessToken = await admin.generateAccessToken();
 
   const cookieOption = {
@@ -26,6 +29,6 @@ export const login = wrapAsync(async (req, res, next) => {
 
   res
     .status(200)
-    .cookie("accessToken", accessToken,cookieOption)
+    .cookie("accessToken", accessToken, cookieOption)
     .json(new ApiResponse(true, "Admin Login Successfull", {}));
 });

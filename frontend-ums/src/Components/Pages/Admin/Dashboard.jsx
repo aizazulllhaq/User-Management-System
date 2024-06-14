@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../Layouts/Navbar";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  const [users, setUsers] = useState([]);
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/v1/admin/del/${id}`, {
+        withCredentials: true,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const Attendence = "Present";
   const AttendenceStyling = `text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg ${
     Attendence === "Present"
@@ -9,9 +23,28 @@ const Dashboard = () => {
       : "bg-gray-600 hover:bg-gray-900 text-white"
   }`;
 
+  useEffect(() => {
+    try {
+      const getAllUsers = async () => {
+        const response = await axios.get(
+          "http://localhost:8080/api/v1/admin/all",
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.data.data) {
+          setUsers(response.data.data);
+        }
+      };
+      getAllUsers();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
   return (
     <>
-      <Navbar path="loggedIn"/>
+      <Navbar path="admin" />
 
       <div className="flex flex-wrap -mx-3 mb-5">
         <div className="w-full max-w-full px-3 mb-6  mx-auto">
@@ -43,47 +76,60 @@ const Dashboard = () => {
                           Attendence
                         </th>
                         <th className="pb-3 text-center min-w-[50px]">
-                          Edit &nbsp;/&nbsp;Delete 
+                          Edit &nbsp;/&nbsp;Delete
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="border-b border-dashed last:border-b-0">
-                        <td className="p-3 pl-0">
-                          <div className="flex items-center">
-                            <div className="relative inline-block shrink-0 rounded-2xl me-3">
-                              <img
-                                src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/img-49-new.jpg"
-                                className="w-16 h-16 inline-block shrink-0 rounded-2xl"
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-3 text-center">
-                          <span className="font-semibold text-light-inverse text-md/normal">
-                            Aizaz Ul Haq
-                          </span>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <span>aizazu88@gmail.com</span>
-                        </td>
-                        <td className="p-3 text-center">
-                          <span className={AttendenceStyling}>
-                            {Attendence}
-                          </span>
-
-                        </td>
-                        <td className="p-3 text-center">
-                          <button className="p-2 mx-1 bg-green-500 rounded-md hover:bg-green-700 text-white text-md">
-                            Edit
-                          </button>
-                          <button className="p-2 mx-1 bg-red-500 rounded-md hover:bg-red-700 text-white text-md">
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                      
+                      {users &&
+                        users.map((user, index) => (
+                          <tr
+                            className="border-b border-dashed last:border-b-0"
+                            key={index}
+                          >
+                            <td className="p-3 pl-0">
+                              <div className="flex items-center">
+                                <div className="relative inline-block shrink-0 rounded-2xl me-3">
+                                  <img
+                                    src={
+                                      user.profileImage ||
+                                      "https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/img-49-new.jpg"
+                                    }
+                                    className="w-16 h-16 inline-block shrink-0 rounded-2xl"
+                                    alt=""
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                            <td className="p-3 text-center">
+                              <span className="font-semibold text-light-inverse text-md/normal">
+                                {user.username}
+                              </span>
+                            </td>
+                            <td className="p-3 pr-0 text-end">
+                              <span>{user.email}</span>
+                            </td>
+                            <td className="p-3 text-center">
+                              <span className={user.attendanceStatusClass}>
+                                {user.attendanceStatus}
+                              </span>
+                            </td>
+                            <td className="p-3 text-center">
+                              <Link
+                                to={`/admin/edit/${user._id}`}
+                                className="p-2 mx-1 bg-green-500 rounded-md hover:bg-green-700 text-white text-md"
+                              >
+                                Edit
+                              </Link>
+                              <button
+                                onClick={() => handleDelete(user._id)}
+                                className="p-2 mx-1 bg-red-500 rounded-md hover:bg-red-700 text-white text-md"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

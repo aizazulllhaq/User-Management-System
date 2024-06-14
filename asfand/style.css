@@ -1,0 +1,23 @@
+.heading{
+text-align: center;
+}
+
+.form-container{
+    border: 2px solid black;
+    padding: 30px;
+}
+
+.inp{
+    margin-bottom: 4px;
+    padding: 5px;
+}
+
+.inp label{
+    display: block;
+    margin-bottom: 5px;
+}
+
+.inp input{
+    border: 1px solid black;
+    border-radius: 5px;
+}

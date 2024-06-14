@@ -8,6 +8,7 @@ import {
   manageUserLeaveRequest,
   updateUser,
 } from "../../Controllers/admin/Auth.Admin.Controller.js";
+import { upload } from "../../Middlewares/Multer.js";
 
 const authAdminRouter = Router();
 
@@ -15,7 +16,7 @@ authAdminRouter
   .post("/new", createNewUser)
   .get("/all", getAllUsers)
   .get("/edit/:uid", editUser)
-  .put("/update", updateUser)
+  .patch("/update/:uid", upload.single("profileImage"), updateUser)
   .delete("/del/:uid", deleteUser)
   .get("/manageLeaveRequest", manageUserLeaveRequest)
   .post("/logout", logout);

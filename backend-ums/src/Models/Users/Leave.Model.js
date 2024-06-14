@@ -23,6 +23,10 @@ const leaveSchema = new Schema({
     enum: ["pending", "approved", "rejected"],
     default: "pending",
   },
+  date:{
+    type:Date,
+    default:Date.now,
+  },
   leaveRequestToken: {
     type: String,
   },

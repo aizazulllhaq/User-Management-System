@@ -89,7 +89,7 @@ export const getAllUsers = wrapAsync(async (req, res, next) => {
   const admin = await User.findById(id);
   if (!admin) return next(new ApiError(400, "Invalid ID"));
 
-  const users = await User.find({}).select(
+  const users = await User.find({role:{$ne:"ADMIN"}}).select(
     "username email profileAvatar grade age country"
   );
 
@@ -117,7 +117,8 @@ export const editUser = wrapAsync(async (req, res, next) => {
 
 export const updateUser = wrapAsync(async (req, res, next) => {
   const { id } = req.user;
-  const { uid, username, age, grade, country } = req.body;
+  const {uid } = req.params;
+  const { username, age, grade, country } = req.body;
   const profileImageFile = req.file?.fieldname;
 
   const admin = await User.findById(id);
@@ -138,9 +139,6 @@ export const updateUser = wrapAsync(async (req, res, next) => {
     user.grade = grade;
   }
 
-  if (gender && gender !== user.gender) {
-    user.gender = gender;
-  }
 
   if (country && country !== user.country) {
     user.country = country;
@@ -165,12 +163,12 @@ export const updateUser = wrapAsync(async (req, res, next) => {
 
   res
     .status(200)
-    .json(new ApiResponse(true, "User Updated Successfully by Admin", {}));
+    .json(new ApiResponse(true, "User Updated Successfully by Admin", user));
 });
 
 export const deleteUser = wrapAsync(async (req, res, next) => {
   const { id } = req.user;
-  const uid = req.params;
+  const {uid} = req.params;
 
   const admin = await User.findById(id);
   if (!admin) return next(new ApiError(400, "Invalid ID"));

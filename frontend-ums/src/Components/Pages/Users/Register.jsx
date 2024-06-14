@@ -12,25 +12,23 @@ const Register = () => {
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
-    console.log(data.profileImage)
-
     setSuccessMessage("");
     setErrorMessage("");
     setLoading(true);
-    
+
     try {
       const formData = new FormData();
       formData.append("username", data.username);
-      formData.append("email", data.email);
-      formData.append("password", data.password);
-      formData.append("profileImage", data.profileImage[0]);
       formData.append("age", data.age);
       formData.append("gender", data.gender);
+      formData.append("email", data.email);
+      formData.append("password", data.password);
       formData.append("grade", data.grade);
       formData.append("country", data.country);
+      formData.append("profileImage", data.profileImage[0]);
 
       const response = await axios.post(
         "http://localhost:8080/api/v1/users/register",
@@ -44,11 +42,10 @@ const Register = () => {
 
       setSuccessMessage(response.data.message);
       setErrorMessage("");
-      console.log(response);
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setSuccessMessage("");
-    }finally {
+    } finally {
       setLoading(false); // Hide loading indicator
     }
   };
@@ -82,13 +79,12 @@ const Register = () => {
             </div>
           )}
 
-           {/* Loading Indicator */}
-           {loading && (
+          {/* Loading Indicator */}
+          {loading && (
             <div className="flex justify-center mb-4">
               <div>Submitting, please wait...</div>
             </div>
           )}
-
 
           <form
             className="space-y-6"
@@ -106,7 +102,7 @@ const Register = () => {
                 <input
                   id="username"
                   autoComplete="email"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("username", {
                     required: "Username is required",
                   })}
@@ -130,7 +126,7 @@ const Register = () => {
                 <input
                   id="email"
                   autoComplete="email"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
@@ -156,7 +152,7 @@ const Register = () => {
                 <input
                   id="age"
                   autoComplete="age"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("age", {
                     required: "age is required",
                   })}
@@ -178,7 +174,7 @@ const Register = () => {
                 <input
                   id="grade"
                   autoComplete="grade"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("grade", {
                     required: "grade is required",
                   })}
@@ -200,7 +196,7 @@ const Register = () => {
                 <input
                   id="country"
                   autoComplete="country"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("country", {
                     required: "country is required",
                   })}
@@ -219,9 +215,9 @@ const Register = () => {
                 Gender
               </label>
               <div className="mt-2">
-              <select
+                <select
                   id="gender"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("gender", {
                     required: "Gender is required",
                   })}
@@ -292,11 +288,12 @@ const Register = () => {
                     required: "Profile image is required",
                   })}
                 />
-               
               </label>
               {errors.profileImage && (
-                  <span className="text-red-500">{errors.profileImage.message}</span>
-                )}
+                <span className="text-red-500">
+                  {errors.profileImage.message}
+                </span>
+              )}
             </div>
 
             <div>

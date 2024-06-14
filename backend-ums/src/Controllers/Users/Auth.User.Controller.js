@@ -11,12 +11,45 @@ export const userProfile = wrapAsync(async (req, res, next) => {
   const { id } = req.user;
 
   const user = await User.findById(id).select(
-    "-_id -password -__v -emailVerificationToken -isVerified -role"
+    "-password -__v -emailVerificationToken -isVerified -role"
   );
 
   if (!user) return next(new ApiError(400, "User Not Found with this ID"));
 
-  res.status(200).json(new ApiResponse(true, "User Profile Data", user));
+  const result = await User.aggregate([
+    {
+      $match: {
+        _id: user._id,
+      },
+    },
+    {
+      $lookup: {
+        from: "attendences",
+        localField: "_id",
+        foreignField: "user",
+        as: "attendancesRecord",
+      },
+    },
+    {
+      $lookup: {
+        from: "leaves",
+        localField: "_id",
+        foreignField: "user",
+        as: "leaveRecords",
+      },
+    },
+    {
+      $project: {
+        username: 1,
+        _id: 0,
+        noOfAttendances: { $size: "$attendancesRecord" },
+        noOfLeaveRequests: { $size: "$leaveRecords" },
+      },
+    },
+  ]);
+
+
+  res.status(200).json(new ApiResponse(true, "User Profile Data", result));
 });
 
 export const editUserData = wrapAsync(async (req, res, next) => {
