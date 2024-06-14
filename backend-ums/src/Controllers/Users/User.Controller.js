@@ -5,7 +5,7 @@ import ApiResponse from "../../Utils/ApiResponse.js";
 import sendMail from "../../Utils/Send-Mail.js";
 import { generateRandomToken } from "../../Utils/generateRandomToken.js";
 import wrapAsync from "../../Utils/wrapAsync.js";
-import { PORT, SERVER_URL } from "../../constant.js";
+import { FRONTEND_URL, PORT, SERVER_URL } from "../../constant.js";
 
 export const register = wrapAsync(async (req, res, next) => {
   const { username, email, age, gender, grade, country, password } = req.body;
