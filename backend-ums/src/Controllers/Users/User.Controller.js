@@ -85,7 +85,7 @@ export const register = wrapAsync(async (req, res, next) => {
       `<h1>Dear ${username}</h1>,<br>
     <br>
       <p>Thank you for registering on our site. Please click on the link below to verify your email address:</p>
-      <a href="http://localhost:5173/verify-email?token=${token}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;">Verify Email</a>
+      <a href="http://localhost:5173/verify-email/${token}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;">Verify Email</a>
       <p>If you did not request this, please ignore this email.</p>
       <br>
       <p>Thank you,<br>Your xyz Company</p>
