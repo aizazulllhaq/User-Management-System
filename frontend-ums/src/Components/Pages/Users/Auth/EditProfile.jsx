@@ -22,6 +22,7 @@ const EditProfile = ({ user = "std" }) => {
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const PATH = user === "std" ? "users/update" : `admin/update/${id}`;
 
   const onSubmit = async (data) => {
     setSuccessMessage("");
@@ -37,7 +38,7 @@ const EditProfile = ({ user = "std" }) => {
       formData.append("country", data.country);
 
       const response = await axios.patch(
-        `http://localhost:8080/api/v1/admin/update/${id}`,
+        `http://localhost:8080/api/v1/${PATH}`,
         formData,
         {
           headers: {
