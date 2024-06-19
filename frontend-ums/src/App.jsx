@@ -12,6 +12,7 @@ import Register from "./Components/Pages/Users/Register";
 import EmailVerification from "./Components/Pages/Users/EmailVerification";
 import View from "./Components/Pages/Users/Auth/View";
 import AdminLogin from "./Components/Pages/Admin/AdminLogin";
+import CreateNewUser from "./Components/Pages/Admin/CreateNewUser";
 
 function App() {
   const router = createBrowserRouter([
@@ -54,6 +55,10 @@ function App() {
     {
       path: "/admin/edit/:id",
       element: <EditProfile user="admin" />,
+    },
+    {
+      path: "/admin/nuser",
+      element: <CreateNewUser />,
     },
     {
       path: "/create-leave-request",

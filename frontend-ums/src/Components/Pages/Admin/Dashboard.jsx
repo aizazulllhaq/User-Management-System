@@ -57,6 +57,9 @@ const Dashboard = () => {
                     Students List
                   </span>
                 </h3>
+                <h3 className="flex flex-col items-end justify-center m-2 ml-0 font-medium text-xl/tight text-dark">
+                  <Link to={"/admin/nuser"} className="p-2 mx-1 bg-purple-600 rounded-md hover:bg-purple-400 text-white text-md">New User</Link>
+                </h3>
               </div>
               {/* end card header */}
               {/* card body  */}
