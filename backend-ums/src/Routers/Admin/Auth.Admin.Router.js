@@ -13,7 +13,7 @@ import { upload } from "../../Middlewares/Multer.js";
 const authAdminRouter = Router();
 
 authAdminRouter
-  .post("/new", createNewUser)
+  .post("/new", upload.single("profileImage"), createNewUser)
   .get("/all", getAllUsers)
   .get("/edit/:uid", editUser)
   .patch("/update/:uid", upload.single("profileImage"), updateUser)

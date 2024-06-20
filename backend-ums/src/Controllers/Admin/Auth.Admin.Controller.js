@@ -12,6 +12,9 @@ import wrapAsync from "../../Utils/wrapAsync.js";
 
 export const createNewUser = wrapAsync(async (req, res, next) => {
   const { id } = req.user;
+  const { username, email, age, gender, grade, country, password } = req.body;
+  const profileImage = req.file?.fieldname;
+  console.log(req.body);
 
   const admin = await User.findById(id);
 
@@ -20,8 +23,6 @@ export const createNewUser = wrapAsync(async (req, res, next) => {
   if (!admin.role == "ADMIN")
     return next(new ApiError(400, "Role Must be ADMIN"));
 
-  const { username, email, age, gender, grade, country, password } = req.body;
-  const profileImage = req.file?.fieldname;
 
   const requiredFields = [
     "username",
